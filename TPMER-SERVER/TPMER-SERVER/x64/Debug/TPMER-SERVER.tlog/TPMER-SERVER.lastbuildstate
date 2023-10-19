@@ -1,2 +1,2 @@
-PlatformToolSet=v143:VCToolArchitecture=Native64Bit:VCToolsVersion=14.37.32822:TargetPlatformVersion=10.0.22000.0:
-Debug|x64|C:\Users\damie\source\repos\TPMER-SERVER\|
+#TargetFrameworkVersion=v4.0:PlatformToolSet=v141:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=10.0.19041.0
+Debug|x64|C:\Users\hugot\Desktop\TP-Mise en route\TPMER-SERVER\|

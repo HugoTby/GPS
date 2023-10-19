@@ -7,7 +7,7 @@ class InscriptionManager {
 
     public function __construct() {
         // Remplacez les données de connexion à votre base de données
-        $servername = "192.168.65.252";
+        $servername = "192.168.64.200";
         $username = "root";
         $password_db = "root";
         $dbname = "TpGPS";

@@ -1,2 +1,2 @@
 CONFIG += no_fixpath
-QT += core serialport sql
+QT += core serialport

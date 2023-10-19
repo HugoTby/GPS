@@ -1,6 +1,6 @@
 <?php
 session_start();
-$servername = "192.168.65.252"; // Nom du serveur MySQL
+$servername = "192.168.64.200"; // Nom du serveur MySQL
 $username = "root"; // Nom d'utilisateur MySQL
 $password = "root"; // Mot de passe MySQL
 $database = "TpGPS"; // Nom de la base de données

@@ -23,16 +23,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="SerialReader.h">
-      <Filter>Header Files</Filter>
+    <QtMoc Include="main.cpp">
+      <Filter>Source Files</Filter>
     </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="SerialReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
