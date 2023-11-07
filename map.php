@@ -5,6 +5,7 @@
     <title>Ma carte</title>
     <!-- Inclure des liens vers les bibliothèques Leaflet CSS et JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
 
@@ -39,32 +40,64 @@
     ?>
 
 
+<div id="map" style="width: 1650px; height: 600px;"></div>
 
-    <div id="map" style="width: 1650px; height: 600px;"></div>
-    <script>
-        var map = L.map('map').setView([49.8951, 2.3022], 8);
+<script>
+    var map;
+    var markers = [];
+    var polyline;
+
+    function initializeMap() {
+        map = L.map('map').setView([49.8951, 2.3022], 9);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
+    }
 
-        var locations = <?php echo json_encode($locations); ?>; // Assurez-vous que $locations est un tableau JSON
+    function updateMapWithData() {
+        $.ajax({
+            url: 'fetch_data.php', // L'URL du script PHP qui récupère les nouvelles données
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                // Effacez les anciens marqueurs
+                markers.forEach(function(marker) {
+                    map.removeLayer(marker);
+                });
+                markers = [];
 
-        var markers = [];
+                // Ajoutez les nouveaux marqueurs
+                data.forEach(function(location) {
+                    var marker = L.marker([location.latitude, location.longitude])
+                        .bindPopup('Coordonnées GPS : ' + location.latitude + ', ' + location.longitude + '<br>Date : ' + location.date)
+                        .addTo(map);
+                    markers.push(marker);
+                });
 
-        // Ajoutez des marqueurs et stockez-les dans le tableau markers
-        locations.forEach(function(location) {
-            var marker = L.marker([location.latitude, location.longitude])
-                .bindPopup('Coordonnées GPS : ' + location.latitude + ', ' + location.longitude + '<br>Date : ' + location.date)
-                .addTo(map);
-            markers.push(marker);
+                // Effacez et recréez la polyline
+                if (polyline) {
+                    map.removeLayer(polyline);
+                }
+                polyline = L.polyline(markers.map(function(marker) {
+                    return marker.getLatLng();
+                }).addTo(map));
+            },
+            error: function(xhr, status, error) {
+                console.log('Erreur lors de la récupération des données : ' + error);
+            }
         });
+    }
 
-        // Créez une polyline à partir des coordonnées des marqueurs
-        var polyline = L.polyline(markers.map(function(marker) {
-            return marker.getLatLng();
-        })).addTo(map);
-    </script>
+    $(document).ready(function() {
+        initializeMap();
+        updateMapWithData(); // Appelez cette fonction une fois au chargement de la page
+
+        // Actualisez les données de la carte toutes les 3 secondes
+        setInterval(updateMapWithData, 1000);
+    });
+</script>
+
 
 </body>
 
