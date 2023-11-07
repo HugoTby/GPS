@@ -65,9 +65,11 @@ void SerialReader::processNMEASentence(const QByteArray& sentence)
             QTime time = QTime::fromString(timeStr.left(6), "hhmmss");
             QDate currentDate = QDate::currentDate();
 
-            QString currentDateTimeStr = currentDate.toString("yyyy-MM-dd hh:mm:ss");
+            // Obtenez la date et l'heure complètes en utilisant la date actuelle et l'heure de la trame NMEA
+            QDateTime currentDateTime(currentDate, time);
 
-            
+            QString currentDateTimeStr = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
+
             QString latitudePartBeforeComma = latitudeStr.mid(0, 2);
             QString latitudePartAfterComma = latitudeStr.mid(2);
 
@@ -75,15 +77,16 @@ void SerialReader::processNMEASentence(const QByteArray& sentence)
             QString longitudePartAfterComma = longitudeStr.mid(1);
 
             qDebug() << "Date et heure de la trame : " << currentDateTimeStr;
-            qDebug() << "Latitude : " <<  latitudePartAfterComma;
+            qDebug() << "Latitude : " << latitudePartAfterComma;
             qDebug() << "Longitude : " << longitudePartAfterComma;
             qDebug() << "";
 
             // Insérer les données dans la base de données
-            insertDataIntoDatabase(currentDateTimeStr,latitudePartAfterComma,  longitudePartAfterComma);
+            insertDataIntoDatabase(currentDateTimeStr, latitudePartAfterComma, longitudePartAfterComma);
         }
     }
 }
+
 
 
 void SerialReader::insertDataIntoDatabase(const QString& currentDateTimeStr, const QString& latitudeStr, const QString& longitudeStr)
