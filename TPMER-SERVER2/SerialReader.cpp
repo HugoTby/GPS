@@ -1,4 +1,4 @@
-﻿#include "SerialReader.h"
+#include "SerialReader.h"
 #include <QDebug>
 #include <QTime>
 #include <QDate>
@@ -21,8 +21,8 @@ SerialReader::SerialReader() : insertionCount(0)
 	}
 
 	// Configurer le port série
-	serialPort.setPortName("COM3");
-	serialPort.setBaudRate(QSerialPort::Baud9600);
+	serialPort.setPortName("COM3"); // Port arduino
+	serialPort.setBaudRate(QSerialPort::Baud9600); // Renseigné sur l'arduino
 	serialPort.setDataBits(QSerialPort::Data8);
 	serialPort.setParity(QSerialPort::NoParity);
 	serialPort.setStopBits(QSerialPort::OneStop);
@@ -43,6 +43,7 @@ SerialReader::SerialReader() : insertionCount(0)
 
 void SerialReader::onReadyRead()
 {
+	// Traitement de la trame
 	QByteArray data = serialPort.readAll();
 	trame.append(data);
 	while (trame.contains('\n')) {
@@ -79,6 +80,7 @@ void SerialReader::processNMEASentence(const QByteArray& sentence)
 			QString formattedLatitude = formatCoordinate(latitudeStr);
 			QString formattedLongitude = formatCoordinate(longitudeStr);
 
+			// Affichage console
 			qDebug() << "Date et heure de la trame : " << currentDateTimeStr;
 			qDebug() << "Latitude : " << formattedLatitude;
 			qDebug() << "Longitude : " << formattedLongitude;
@@ -105,7 +107,7 @@ QString SerialReader::formatCoordinate(const QByteArray& coordinateStr)
 	QString formattedCoordinate = QString::number(coordinate, 'f', 4);
 
 	if (coordinate < 0) {
-		formattedCoordinate.prepend("-");
+		formattedCoordinate.prepend("-"); // Si il y a un '-' devant les coordonnées
 	}
 
 	return formattedCoordinate;
@@ -115,14 +117,17 @@ void SerialReader::insertDataIntoDatabase(const QString& currentDateTimeStr, con
 {
 	QSqlQuery query;
 	query.prepare("INSERT INTO `trame`(`longitude`, `latitude`) VALUES (:longitude, :latitude)");
+	// Requet d'insertion en bdd
 
 	query.bindValue(":longitude", longitudeStr);
 	query.bindValue(":latitude", latitudeStr);
 
 	if (query.exec()) {
 		qDebug() << "Donnees inserees avec succes dans la base de donnees.";
+		// Message insertion bdd - réussite
 	}
 	else {
 		qDebug() << "Erreur lors de l'insertion dans la base de donnees.";
+		// Message insertion bdd - échec
 	}
 }
