@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Ma carte</title>
+    <title>TP Mise en route</title>
     <!-- Inclure des liens vers les bibliothèques Leaflet CSS et JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
